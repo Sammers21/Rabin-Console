@@ -700,12 +700,16 @@ namespace RabinLib
         }
         #endregion
 
-        #region
-       public static bool Miller_Rabin_Test(BigInteger Number, BigInteger Rounds)
+        #region Miller_Rabin
+        public static bool Miller_Rabin_Test(BigInteger Number, BigInteger Rounds)
         {
-            if (Number <= 2 || BigInteger.ModPow(Number, 1, 2) == 0)
+            if (Number <= 2)
                 throw new Exception("На тест подано чилос меньше 3");
 
+            if (BigInteger.ModPow(Number, 1, 2) == 0)
+                return false;
+
+ 
 
             BigInteger S, T;
 
@@ -741,6 +745,59 @@ namespace RabinLib
 
             return true;
         }
+        public static bool Miller_Rabin_Test(BigInteger Number)
+        {
+            if (Number <= 2)
+                throw new Exception("На тест подано чилос меньше 3");
+
+            if (BigInteger.ModPow(Number, 1, 2) == 0)
+                return false;
+
+            int X = 1;
+            BigInteger pow = 2;
+            do
+            {
+                if (X < pow * 2 && pow >= X)
+                    break;
+                pow *= 2;
+                X++;
+            } while (true);
+
+            BigInteger S, T;
+
+            Step2PowSumnT(Number, out T, out S);
+
+            //цикл А
+            for (int i = 0; i < X; i++)
+            {
+                bool flagtoCycleA = false;
+                BigInteger a = Rand(Number - 1);
+                BigInteger x = BigInteger.ModPow(a, T, Number);
+                if (x == 1 || x == Number - 1)
+                    continue;
+                //цикл Б
+                for (int k = 0; k < (S - 1); k++)
+                {
+                    x = BigInteger.ModPow(x, 2, Number);
+                    if (x == 1)
+                        return false;
+                    if (x == Number - 1)
+                    {
+                        flagtoCycleA = true;
+                        break;
+                    }
+
+
+                }
+                if (flagtoCycleA)
+                    continue;
+                return false;
+
+            }
+
+            return true;
+        }
+
         #endregion
 
         #region Inactive methods

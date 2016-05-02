@@ -14,7 +14,9 @@ namespace Testsomelibs
         {
             do
             {
-                Console.WriteLine(Rabin.Miller_Rabin_Test(int.Parse(Console.ReadLine()),5));
+                BigInteger k = 20979403;
+                k *= 3004913;
+                Console.WriteLine(Rabin.Miller_Rabin_Test(k));
             } while (Console.ReadKey(true).Key != ConsoleKey.Escape);
             
         }
