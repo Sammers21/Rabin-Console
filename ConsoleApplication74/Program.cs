@@ -16,7 +16,7 @@ namespace RabinTestConsole
 
             do
             {
-                Console.WriteLine("Привет из бабушкиного компа");
+               
                 Console.Clear();
                 Console.ForegroundColor = ConsoleColor.Red;
                 Console.WriteLine("Введиет тестиремый реджим \n" +
