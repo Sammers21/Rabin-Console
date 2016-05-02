@@ -11,6 +11,18 @@ namespace RabinLib
     {
         static Random rnd = new Random();
 
+
+        #region Methods for Big text
+        public static BigInteger[] EncryptionBigText(string text, BigInteger OpneyKey)
+        {
+            throw new Exception();
+        }
+        public static string DecryptionBigText(BigInteger[] Text, BigInteger q, BigInteger p)
+        {
+            throw new Exception();
+        }
+        #endregion
+
         #region Rabin Classic System
         //Криптосистема Рабина
         //page 156
@@ -54,7 +66,7 @@ namespace RabinLib
         public static string Decryption(BigInteger TextC, BigInteger q, BigInteger p)
         {
 
-            if (!(Miller_Rabin_Test(q)&&Miller_Rabin_Test(p)))
+            if (!(Miller_Rabin_Test(q) && Miller_Rabin_Test(p)))
                 throw new Exception("Один из ключей не простой");
 
 
@@ -119,11 +131,11 @@ namespace RabinLib
         public static BigInteger RabinSignatyre(string text, BigInteger p, BigInteger q, out BigInteger II)
         {
 
-            if (!(Miller_Rabin_Test(q)&&Miller_Rabin_Test(p)))
+            if (!(Miller_Rabin_Test(q) && Miller_Rabin_Test(p)))
                 throw new Exception("Один из ключей не простой");
 
             BigInteger OpenKey = p * q;
-           
+
 
             BigInteger result = ConvToBigIntWithBit(text);
 
@@ -716,7 +728,7 @@ namespace RabinLib
             if (BigInteger.ModPow(Number, 1, 2) == 0)
                 return false;
 
- 
+
 
             BigInteger S, T;
 
