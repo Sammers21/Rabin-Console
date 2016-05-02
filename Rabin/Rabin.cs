@@ -701,7 +701,7 @@ namespace RabinLib
         #endregion
 
         #region
-        static bool Miller_Rabin_Test(BigInteger Number, BigInteger rounds)
+        static bool Miller_Rabin_Test(BigInteger Number, BigInteger Rounds)
         {
             if (Number <= 2 || BigInteger.ModPow(Number, 1, 2) == 0)
                 throw new Exception("На тест подано чилос меньше 3");
@@ -712,14 +712,35 @@ namespace RabinLib
 
             Step2PowSumnT(Number, out T, out S);
 
-            for (int i = 0; i < rounds; i++)
+            //цикл А
+            for (int i = 0; i < Rounds; i++)
             {
+                bool flagtoCycleA=false;
+                BigInteger a= Rand(Number-1);
+                BigInteger x=BigInteger.ModPow(a,T,Number);
+                if (x==1||x==n-1)
+                    continue;
+                //цикл Б
+                for ( int k=0;k<(S-1);k++)
+                {
+                    x=BigInteger.ModPow(x,2,Number);
+                    if (x==1)
+                    return false;
+                    if (x==n-1)
+                    {
+                        flagtoCycleA=true;
+                        break;
+                    }
+
+
+                }
+                if (flagtoCycleA)
+                    continue;
+                return false;
 
             }
 
-            return result;
-
-            throw new Exception();
+            return true;
         }
         #endregion
 
