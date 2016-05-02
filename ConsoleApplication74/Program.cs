@@ -16,6 +16,7 @@ namespace RabinTestConsole
 
             do
             {
+                Console.WriteLine("kek");
                
                 Console.Clear();
                 Console.ForegroundColor = ConsoleColor.Red;
