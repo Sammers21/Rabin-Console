@@ -1,0 +1,34 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 14
+VisualStudioVersion = 14.0.24720.0
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RabinTestConsole", "ConsoleApplication74\RabinTestConsole.csproj", "{D41AF5B2-9880-480E-BFD6-6F1390CFB06C}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RabinLib", "Rabin\RabinLib.csproj", "{D6CB7FAE-0FC1-4D20-AF14-8679EA5BE01E}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Testsomelibs", "Testsomelibs\Testsomelibs.csproj", "{1A348ADC-DA3D-4344-A86B-98913BF682E5}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{D41AF5B2-9880-480E-BFD6-6F1390CFB06C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D41AF5B2-9880-480E-BFD6-6F1390CFB06C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D41AF5B2-9880-480E-BFD6-6F1390CFB06C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D41AF5B2-9880-480E-BFD6-6F1390CFB06C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D6CB7FAE-0FC1-4D20-AF14-8679EA5BE01E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D6CB7FAE-0FC1-4D20-AF14-8679EA5BE01E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D6CB7FAE-0FC1-4D20-AF14-8679EA5BE01E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D6CB7FAE-0FC1-4D20-AF14-8679EA5BE01E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1A348ADC-DA3D-4344-A86B-98913BF682E5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1A348ADC-DA3D-4344-A86B-98913BF682E5}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1A348ADC-DA3D-4344-A86B-98913BF682E5}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1A348ADC-DA3D-4344-A86B-98913BF682E5}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal
