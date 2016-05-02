@@ -9,10 +9,10 @@ namespace RabinLib
 
     public static class Rabin
     {
+
+        #region Rabin Classic System
         //Криптосистема Рабина
         //page 156
-        #region Rabin Classic
-
 
         /// <summary>
         /// Шифрование по обычной схеме Рабина
@@ -22,7 +22,7 @@ namespace RabinLib
         /// <returns>Число представлющее текст</returns>
         public static BigInteger Encryption(string text, BigInteger OpenKey)
         {
-            BigInteger result = ConvToString(text);
+            BigInteger result = ConvToBigIntWithBit(text);
 
             Console.WriteLine("результат представления в 27 ричной системе: " + result);
 
@@ -92,15 +92,15 @@ namespace RabinLib
             BigInteger message = BigInteger.Parse(Analized[0]);
             message /= 100;
             Console.WriteLine("полученно " + message);
-            return (ConvertTo27System(message));
+            return (ConvToStringWithBit(message));
 
         }
 
         #endregion
 
+        #region Rabin Signatyre
         //Электронно цифровая подпись Рабина с Извлечением сообщения
         //page158
-        #region Rabin Signatyre
 
         /// <summary>
         /// Вычисление подписи
@@ -151,13 +151,13 @@ namespace RabinLib
                 Console.WriteLine("Подпись принимается");
             else
                 Console.WriteLine("Подпись не принимается");
-            return (ConvertTo27System(M));
+            return (ConvToStringWithBit(M));
         }
 
         #endregion
 
-        //Модифицированная цифровая подпись Рабина с извелением сообщения
         #region Rabin Modif Signatyre
+        //Модифицированная цифровая подпись Рабина с извелением сообщения
 
         /// <summary>
         /// Вычисление закрытого ключа
@@ -184,7 +184,7 @@ namespace RabinLib
         public static BigInteger ModifCalcSignatyre(string st, BigInteger OpenKey, BigInteger SecretKey)
         {
             //step 1 page 160
-            BigInteger T = ConvToString(st);
+            BigInteger T = ConvToBigIntWithBit(st);
 
             if (T > ((OpenKey - 6) / 16))
                 throw new Exception("не удалось вычислить подпись так как m=>(n-6)/16");
@@ -200,7 +200,7 @@ namespace RabinLib
                 S = BigInteger.ModPow(w, SecretKey, OpenKey);
 
             else if (Jack == -1)
-                S = BigInteger.ModPow(w / 2, SecretKey, OpenKey);
+                S = BigInteger.ModPow((w / 2), SecretKey, OpenKey);
 
             else
                 throw new Exception("Требуется факторизация числа n");
@@ -217,14 +217,14 @@ namespace RabinLib
         /// <returns>Извлеченное сообщение</returns>
         public static string DecryptSign(BigInteger S, BigInteger OpenKey, out bool res)
         {
-            BigInteger u = BigInteger.ModPow(S, 2, OpenKey), U = u % 8;
-
+            BigInteger u = BigInteger.ModPow(S, 2, OpenKey), U = BigInteger.ModPow(u, 1, 8) ;
+            Console.WriteLine("u= "+u+" U="+U);
             BigInteger w;
             if (U == 6)
                 w = u;
 
             else if (U == 3)
-                w = 2u;
+                w = 2*u;
 
             else if (U == 7)
                 w = OpenKey - u;
@@ -234,7 +234,7 @@ namespace RabinLib
 
             else
                 throw new Exception("Ошибка в проверке подписи");
-
+            Console.WriteLine("проверка w=" + w);
             SignatyreVert Vetif = delegate (BigInteger si)
               {
                   if ((si - 6) % 16 == 0)
@@ -242,23 +242,22 @@ namespace RabinLib
                   else return false;
               };
 
+   
             res = Vetif(w);
 
             if (res == false)
-                throw new Exception("Подпись не принята");
+                Console.WriteLine("Подпись не принята");
 
             BigInteger m = (w - 6) / 16;
 
-            return ConvertTo27System(m);
+            return ConvToStringWithBit(m);
         }
 
         #endregion
 
-        //Вспомогательные методы
-        //page159
 
 
-        #region toWork
+        #region ConvertMethods
 
         /// <summary>
         /// Преобразование в число текста
@@ -338,49 +337,7 @@ namespace RabinLib
             return result;
         }
 
-        /// <summary>
-        /// Преобразует строку в число
-        /// </summary>
-        /// <param name="text">Входная строка </param>
-        /// <returns>Число</returns>
-        static BigInteger ConvToString(string text)
-        {
-            return ConvToBigIntWithBit(text);
-
-            char[] newSystemMod = text.ToCharArray();
-            Array.Reverse(newSystemMod);
-
-            BigInteger result = 0;
-
-            for (int i = 0; i < newSystemMod.Length; i++)
-                result += (BigInteger)Math.Pow(27, i) * ((int)newSystemMod[i] - (int)'A' + 1);
-            return result;
-        }
-
-        /// <summary>
-        /// Конвертировние в строку из числа по основанию 27
-        /// </summary>
-        /// <param name="numDEX">Число для перевода</param>
-        /// <returns>тТекст</returns>
-        static string ConvertTo27System(BigInteger numDEX)
-        {
-            return ConvToStringWithBit(numDEX);
-
-            string result = "";
-            BigInteger initNumb = numDEX;
-            while (initNumb > 26)
-            {
-                result += (char)('A' - 1 + initNumb % 27);
-                initNumb /= 27;
-            }
-            result += (char)('A' - 1 + initNumb);
-            char[] ch = result.ToCharArray();
-            Array.Reverse(ch);
-            result = "";
-            foreach (char c in ch)
-                result += c + "";
-            return result;
-        }
+    
 
         #endregion
 
@@ -417,7 +374,7 @@ namespace RabinLib
             }
         }
 
-    
+
 
         /// <summary>
         /// Вычисление сдвига и подписи
@@ -513,7 +470,7 @@ namespace RabinLib
                 bool flag = true;
 
                 int[] pio = (p + "").ToCharArray().Select(k => int.Parse(k + "")).ToArray();
-             
+
                 for (int i = 0; i < pio.Length; i++)
                 {
 
@@ -570,7 +527,7 @@ namespace RabinLib
             } while (true);
 
         }
-        
+
 
         /// <summary>
         /// Сивол якоби
@@ -582,7 +539,7 @@ namespace RabinLib
         {
             BigInteger d, v, u;
             ShareAlgoryeOfEyclid(out d, out v, out u, a, n);
-            if (d!=1)
+            if (d != 1)
                 return 0;
             if (a < 0)     //1
                 return (((n - 1) / 2) == 0 ? 1 : -1) * Jacobi(-a, n);
@@ -743,6 +700,51 @@ namespace RabinLib
         }
         #endregion
 
+        #region Inactive methods
+        /// <summary>
+        /// Преобразует строку в число
+        /// </summary>
+        /// <param name="text">Входная строка </param>
+        /// <returns>Число</returns>
+        static BigInteger ConvToString(string text)
+        {
+  
+
+            char[] newSystemMod = text.ToCharArray();
+            Array.Reverse(newSystemMod);
+
+            BigInteger result = 0;
+
+            for (int i = 0; i < newSystemMod.Length; i++)
+                result += (BigInteger)Math.Pow(27, i) * ((int)newSystemMod[i] - (int)'A' + 1);
+            return result;
+        }
+
+        /// <summary>
+        /// Конвертировние в строку из числа по основанию 27
+        /// </summary>
+        /// <param name="numDEX">Число для перевода</param>
+        /// <returns>тТекст</returns>
+        static string ConvertTo27System(BigInteger numDEX)
+        {
+         
+
+            string result = "";
+            BigInteger initNumb = numDEX;
+            while (initNumb > 26)
+            {
+                result += (char)('A' - 1 + initNumb % 27);
+                initNumb /= 27;
+            }
+            result += (char)('A' - 1 + initNumb);
+            char[] ch = result.ToCharArray();
+            Array.Reverse(ch);
+            result = "";
+            foreach (char c in ch)
+                result += c + "";
+            return result;
+        }
+        #endregion
     }
 
 }
