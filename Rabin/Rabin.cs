@@ -452,7 +452,7 @@ namespace RabinLib
         }
         static BigInteger Rand(BigInteger p)
         {
-            
+
             BigInteger result;
             string str = "";
             bool flag = true;
@@ -706,7 +706,6 @@ namespace RabinLib
             if (Number <= 2 || BigInteger.ModPow(Number, 1, 2) == 0)
                 throw new Exception("На тест подано чилос меньше 3");
 
-            bool result;
 
             BigInteger S, T;
 
@@ -715,20 +714,20 @@ namespace RabinLib
             //цикл А
             for (int i = 0; i < Rounds; i++)
             {
-                bool flagtoCycleA=false;
-                BigInteger a= Rand(Number-1);
-                BigInteger x=BigInteger.ModPow(a,T,Number);
-                if (x==1||x==n-1)
+                bool flagtoCycleA = false;
+                BigInteger a = Rand(Number - 1);
+                BigInteger x = BigInteger.ModPow(a, T, Number);
+                if (x == 1 || x == Number - 1)
                     continue;
                 //цикл Б
-                for ( int k=0;k<(S-1);k++)
+                for (int k = 0; k < (S - 1); k++)
                 {
-                    x=BigInteger.ModPow(x,2,Number);
-                    if (x==1)
-                    return false;
-                    if (x==n-1)
+                    x = BigInteger.ModPow(x, 2, Number);
+                    if (x == 1)
+                        return false;
+                    if (x == Number - 1)
                     {
-                        flagtoCycleA=true;
+                        flagtoCycleA = true;
                         break;
                     }
 
