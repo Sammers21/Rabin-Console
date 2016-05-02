@@ -701,7 +701,7 @@ namespace RabinLib
         #endregion
 
         #region
-        static bool Miller_Rabin_Test(BigInteger Number, BigInteger Rounds)
+       public static bool Miller_Rabin_Test(BigInteger Number, BigInteger Rounds)
         {
             if (Number <= 2 || BigInteger.ModPow(Number, 1, 2) == 0)
                 throw new Exception("На тест подано чилос меньше 3");
