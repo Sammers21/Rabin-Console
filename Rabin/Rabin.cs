@@ -242,6 +242,7 @@ namespace RabinLib
                   else return false;
               };
 
+            Console.WriteLine("проверка w="+w);
             res = Vetif(w);
 
             if (res == false)
