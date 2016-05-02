@@ -99,7 +99,7 @@ namespace RabinTestConsole
                             string Text = Console.ReadLine();
                             try
                             {
-                                BigInteger p = 5867, q = 5743, n = q * p, SEcret = Rabin.CalcOfSecretKey(p, q);
+                                BigInteger p = 3795059, q = 3795007, n = q * p, SEcret = Rabin.CalcOfSecretKey(p, q);
 
                                 Console.WriteLine("Отрытый ключ n={0}  Secret key={1}", n, SEcret);
 
