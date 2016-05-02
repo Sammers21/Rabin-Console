@@ -97,7 +97,8 @@ namespace RabinTestConsole
                             Console.Clear();
                             Console.WriteLine("Ведиет текст для зашифровки");
                             string Text = Console.ReadLine();
-                        
+                            try
+                            {
                                 BigInteger p = 5867, q = 5743, n = q * p, SEcret = Rabin.CalcOfSecretKey(p, q);
 
                                 Console.WriteLine("Отрытый ключ n={0}  Secret key={1}", n, SEcret);
@@ -111,10 +112,13 @@ namespace RabinTestConsole
                                 Console.WriteLine("Подпись имеет значе " + ans);
 
                                 Console.ReadLine();
-                         
-                              /*  Console.WriteLine(e.Message);
-                                Console.WriteLine("\n Не забыайте что ключи должны быть дотстаточно большими");*/
-                           
+                            }
+                            catch(Exception e)
+                            {
+
+                                Console.WriteLine(e.Message);
+                                Console.WriteLine("\n Не забыайте что ключи должны быть дотстаточно большими");
+                            }
                         }
                         break;
                     default:
