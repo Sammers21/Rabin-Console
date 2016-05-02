@@ -53,6 +53,11 @@ namespace RabinLib
         /// <returns>Расшифрованный текст</returns>
         public static string Decryption(BigInteger TextC, BigInteger q, BigInteger p)
         {
+
+            if (!(Miller_Rabin_Test(q)&&Miller_Rabin_Test(p)))
+                throw new Exception("Один из ключей не простой");
+
+
             BigInteger r, _r;
             BigInteger s, _s;
 
@@ -114,15 +119,17 @@ namespace RabinLib
         public static BigInteger RabinSignatyre(string text, BigInteger p, BigInteger q, out BigInteger II)
         {
 
+            if (!(Miller_Rabin_Test(q)&&Miller_Rabin_Test(p)))
+                throw new Exception("Один из ключей не простой");
+
             BigInteger OpenKey = p * q;
-            char[] newSystemMod = text.ToCharArray();
-            Array.Reverse(newSystemMod);
+           
 
             BigInteger result = ConvToBigIntWithBit(text);
 
 
 
-            Console.WriteLine("результат представления в 27 ричной системе: " + result);
+            Console.WriteLine("результат числового представления : " + result);
 
             result = MX(result);
 
@@ -268,7 +275,7 @@ namespace RabinLib
             Console.WriteLine("Текст на входе " + Text + "\n");
 
             byte[] data = Encoding.UTF8.GetBytes(Text);
-            Console.Write("массив байt");
+            Console.Write("массив байt \n");
 
 
             for (int i = 0; i < data.Length; i++)
@@ -278,7 +285,7 @@ namespace RabinLib
                     rees = i % 5 == 0 ? "\n" : "";
                 Console.Write(data[i] + "\t" + rees);
             }
-
+            Console.WriteLine("\n")
 
             BigInteger res = 0;
 
