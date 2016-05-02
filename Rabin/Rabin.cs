@@ -9,6 +9,7 @@ namespace RabinLib
 
     public static class Rabin
     {
+        static Random rnd = new Random();
 
         #region Rabin Classic System
         //Криптосистема Рабина
@@ -24,7 +25,7 @@ namespace RabinLib
         {
             BigInteger result = ConvToBigIntWithBit(text);
 
-            Console.WriteLine("результат представления в 27 ричной системе: " + result);
+            Console.WriteLine("результат числового представления: " + result);
 
             result = MX(result);
 
@@ -217,14 +218,14 @@ namespace RabinLib
         /// <returns>Извлеченное сообщение</returns>
         public static string DecryptSign(BigInteger S, BigInteger OpenKey, out bool res)
         {
-            BigInteger u = BigInteger.ModPow(S, 2, OpenKey), U = BigInteger.ModPow(u, 1, 8) ;
-            Console.WriteLine("u= "+u+" U="+U);
+            BigInteger u = BigInteger.ModPow(S, 2, OpenKey), U = BigInteger.ModPow(u, 1, 8);
+            Console.WriteLine("u= " + u + " U=" + U);
             BigInteger w;
             if (U == 6)
                 w = u;
 
             else if (U == 3)
-                w = 2*u;
+                w = 2 * u;
 
             else if (U == 7)
                 w = OpenKey - u;
@@ -242,7 +243,7 @@ namespace RabinLib
                   else return false;
               };
 
-   
+
             res = Vetif(w);
 
             if (res == false)
@@ -335,7 +336,7 @@ namespace RabinLib
             return result;
         }
 
-    
+
 
         #endregion
 
@@ -449,7 +450,37 @@ namespace RabinLib
             return result;
 
         }
+        static BigInteger Rand(BigInteger p)
+        {
+            
+            BigInteger result;
+            string str = "";
+            bool flag = true;
 
+            int[] pio = (p + "").ToCharArray().Select(k => int.Parse(k + "")).ToArray();
+
+            for (int i = 0; i < pio.Length; i++)
+            {
+
+                int x;
+                if (flag)
+                {
+                    x = rnd.Next(1, pio[i] + 1);
+                    if (x < pio[i])
+                        flag = false;
+
+                }
+                else
+                {
+                    x = rnd.Next(1, 10);
+                }
+
+                str += x;
+            }
+
+            result = BigInteger.Parse(str);
+            return result;
+        }
         /// <summary>
         /// Выбор рандомного числа B
         /// </summary>
@@ -457,39 +488,10 @@ namespace RabinLib
         /// <returns>Выбранное число </returns>
         static BigInteger ChooseRandB(BigInteger p)
         {
-            //  if (p > int.MaxValue)
-            //      throw new Exception("P cлишком большое для приведления к int");
-
-            Random rnd = new Random();
             BigInteger result;
             do
             {
-                string str = "";
-                bool flag = true;
-
-                int[] pio = (p + "").ToCharArray().Select(k => int.Parse(k + "")).ToArray();
-
-                for (int i = 0; i < pio.Length; i++)
-                {
-
-                    int x;
-                    if (flag)
-                    {
-                        x = rnd.Next(1, pio[i] + 1);
-                        if (x < pio[i])
-                            flag = false;
-
-                    }
-                    else
-                    {
-                        x = rnd.Next(1, 10);
-                    }
-
-                    str += x;
-                }
-
-                result = BigInteger.Parse(str);
-
+                result = Rand(p);
                 if (Jacobi(result, p) == -1)
                     return result;
 
@@ -698,6 +700,29 @@ namespace RabinLib
         }
         #endregion
 
+        #region
+        static bool Miller_Rabin_Test(BigInteger Number, BigInteger rounds)
+        {
+            if (Number <= 2 || BigInteger.ModPow(Number, 1, 2) == 0)
+                throw new Exception("На тест подано чилос меньше 3");
+
+            bool result;
+
+            BigInteger S, T;
+
+            Step2PowSumnT(Number, out T, out S);
+
+            for (int i = 0; i < rounds; i++)
+            {
+
+            }
+
+            return result;
+
+            throw new Exception();
+        }
+        #endregion
+
         #region Inactive methods
         /// <summary>
         /// Преобразует строку в число
@@ -706,7 +731,7 @@ namespace RabinLib
         /// <returns>Число</returns>
         static BigInteger ConvToString(string text)
         {
-  
+
 
             char[] newSystemMod = text.ToCharArray();
             Array.Reverse(newSystemMod);
@@ -725,7 +750,7 @@ namespace RabinLib
         /// <returns>тТекст</returns>
         static string ConvertTo27System(BigInteger numDEX)
         {
-         
+
 
             string result = "";
             BigInteger initNumb = numDEX;
