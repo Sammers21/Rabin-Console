@@ -200,7 +200,7 @@ namespace RabinLib
                 S = BigInteger.ModPow(w, SecretKey, OpenKey);
 
             else if (Jack == -1)
-                S = BigInteger.ModPow(w / 2, SecretKey, OpenKey);
+                S = BigInteger.ModPow((w / 2), SecretKey, OpenKey);
 
             else
                 throw new Exception("Требуется факторизация числа n");
@@ -217,14 +217,14 @@ namespace RabinLib
         /// <returns>Извлеченное сообщение</returns>
         public static string DecryptSign(BigInteger S, BigInteger OpenKey, out bool res)
         {
-            BigInteger u = BigInteger.ModPow(S, 2, OpenKey), U = u % 8;
-
+            BigInteger u = BigInteger.ModPow(S, 2, OpenKey), U = BigInteger.ModPow(u, 1, 8) ;
+            Console.WriteLine("u= "+u+" U="+U);
             BigInteger w;
             if (U == 6)
                 w = u;
 
             else if (U == 3)
-                w = 2u;
+                w = 2*u;
 
             else if (U == 7)
                 w = OpenKey - u;
@@ -234,7 +234,7 @@ namespace RabinLib
 
             else
                 throw new Exception("Ошибка в проверке подписи");
-
+            Console.WriteLine("проверка w=" + w);
             SignatyreVert Vetif = delegate (BigInteger si)
               {
                   if ((si - 6) % 16 == 0)
@@ -242,11 +242,11 @@ namespace RabinLib
                   else return false;
               };
 
-            Console.WriteLine("проверка w="+w);
+   
             res = Vetif(w);
 
             if (res == false)
-                throw new Exception("Подпись не принята");
+                Console.WriteLine("Подпись не принята");
 
             BigInteger m = (w - 6) / 16;
 
@@ -699,7 +699,6 @@ namespace RabinLib
             return CryptTEXT % 100 + CryptTEXT * 100;
         }
         #endregion
-
 
         #region Inactive methods
         /// <summary>
