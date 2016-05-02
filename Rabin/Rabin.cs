@@ -285,7 +285,7 @@ namespace RabinLib
                     rees = i % 5 == 0 ? "\n" : "";
                 Console.Write(data[i] + "\t" + rees);
             }
-            Console.WriteLine("\n")
+            Console.WriteLine("\n");
 
             BigInteger res = 0;
 
@@ -707,7 +707,7 @@ namespace RabinLib
         }
         #endregion
 
-        #region Miller_Rabin
+        #region Miller_Rabin_Tests
         public static bool Miller_Rabin_Test(BigInteger Number, BigInteger Rounds)
         {
             if (Number <= 2)
