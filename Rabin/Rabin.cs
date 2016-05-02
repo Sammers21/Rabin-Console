@@ -255,8 +255,6 @@ namespace RabinLib
 
         #endregion
 
-
-
         #region ConvertMethods
 
         /// <summary>
@@ -341,7 +339,7 @@ namespace RabinLib
 
         #endregion
 
-        #region staticRegion
+        #region CoreMethods
 
         /// <summary>
         /// Проверка подписи
