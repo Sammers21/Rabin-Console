@@ -16,7 +16,7 @@ namespace RabinTestConsole
 
             do
             {
-               
+               Console.WriteLine("koks");
                 Console.Clear();
                 Console.ForegroundColor = ConsoleColor.Red;
                 Console.WriteLine("Введиет тестиремый реджим \n" +
