@@ -13,13 +13,17 @@ namespace RabinLib
 
 
         #region Methods for Big text
-        public static BigInteger[] EncryptionBigText(string text, BigInteger OpneyKey)
+        public static byte[] EncryptionBigText(string text, BigInteger OpneyKey)
         {
             throw new Exception();
         }
-        public static string DecryptionBigText(BigInteger[] Text, BigInteger q, BigInteger p)
+        public static string DecryptionBigText(byte[] Text, BigInteger q, BigInteger p)
         {
             throw new Exception();
+        }
+        static BigInteger CalcylateByteSize(BigInteger Openkey)
+        {
+
         }
         #endregion
 
