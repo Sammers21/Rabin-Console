@@ -13,8 +13,15 @@ namespace RabinLib
 
 
         #region Methods for Big text
-        public static byte[] EncryptionBigText(string text, BigInteger OpneyKey)
+        public static byte[] EncryptionBigText(string text, BigInteger OpenyKey)
         {
+            BigInteger size = CalcylateByteSize(OpenyKey);
+
+            byte[] textUTF8 = Encoding.UTF8.GetBytes(text);
+            
+
+
+
             throw new Exception();
         }
         public static string DecryptionBigText(byte[] Text, BigInteger q, BigInteger p)
@@ -23,6 +30,19 @@ namespace RabinLib
         }
         static BigInteger CalcylateByteSize(BigInteger Openkey)
         {
+            BigInteger x = 256, bytecount = 0;
+
+
+            while (Openkey > x)
+            {
+                x *= 256;
+                bytecount++;
+            }
+            if (bytecount <= 1)
+                throw new Exception("слишком маленький открытый ключ");
+
+            return bytecount;
+
 
         }
         #endregion
