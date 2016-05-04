@@ -5,35 +5,45 @@ using System.Numerics;
 using System.Text;
 namespace RabinLib
 {
+    //делегат использующийся в коде
     delegate bool SignatyreVert(BigInteger key);
 
     public static class Rabin
     {
+        /// <summary>
+        /// переменная для полуения случайных чисел
+        /// </summary>
         static Random rnd = new Random();
 
-
         #region Methods for Big text
+        /// <summary>
+        /// Метод для шифровки большого текста
+        /// </summary>
+        /// <param name="text">Текс</param>
+        /// <param name="OpenyKey">Открытый ключ</param>
+        /// <returns>Массив зашиврованных чисел</returns>
         public static BigInteger[] EncryptionBigText(string text, BigInteger OpenyKey)
         {
             int size = (int)CalcylateByteSize(OpenyKey);
 
-            Console.WriteLine("size is " + size);
+            Console.WriteLine("Размер блока байтов для данного ключа: " + size);
+
             byte[] textUTF8 = Encoding.UTF8.GetBytes(text);
 
-            Console.WriteLine("Представления текста в виде массива байтов:");
+            Console.WriteLine("Представления текста в виде массива байтов:\n\n");
             int itr = 1;
             foreach (byte b in textUTF8)
             {
-                string s = "\t" + b+(itr%10==0 ? "\n": "");
+                string s = "\t" + b + (itr % 10 == 0 ? "\n" : "");
                 Console.Write("\t" + b);
             }
+            Console.WriteLine("\n\n");
 
             int cycleCount = (textUTF8.Length / size) + (textUTF8.Length % size == 0 ? 0 : 1);
             bool falgOK = cycleCount == (textUTF8.Length / size);
             BigInteger[] result = new BigInteger[cycleCount];
 
             int iteratoR = 0;
-
 
             for (int i = 0; i < cycleCount; i++)
             {
@@ -49,16 +59,17 @@ namespace RabinLib
 
             }
 
-
             return result;
-
-
         }
+        /// <summary>
+        /// Расшифровка большого текста
+        /// </summary>
+        /// <param name="Text">зашифрованное представление текста</param>
+        /// <param name="q">один из закрытых ключей</param>
+        /// <param name="p">один из закрытых ключей</param>
+        /// <returns>Расшифрованный текст</returns>
         public static string DecryptionBigText(BigInteger[] Text, BigInteger q, BigInteger p)
         {
-
-            string result = "";
-
 
             List<byte> bytelist = new List<byte>();
 
@@ -74,6 +85,7 @@ namespace RabinLib
 
             int itr = 1;
 
+            Console.WriteLine("Расшифрованный массив байт");
             foreach (byte b in bytelist)
             {
                 string s = "\t" + b + (itr % 10 == 0 ? "\n" : "");
@@ -82,6 +94,12 @@ namespace RabinLib
 
             return Encoding.UTF8.GetString(bytelist.ToArray());
         }
+
+        /// <summary>
+        /// Рассчет размера блока байт для ключа использующегося в шифровании
+        /// </summary>
+        /// <param name="Openkey">Открытый ключ</param>
+        /// <returns>Размер максимального блока для шифрования</returns>
         static BigInteger CalcylateByteSize(BigInteger Openkey)
         {
             BigInteger x = 256, bytecount = 1;
@@ -464,8 +482,8 @@ namespace RabinLib
         /// <summary>
         /// преобразует число в массив байт
         /// </summary>
-        /// <param name="textnumb"></param>
-        /// <returns></returns>
+        /// <param name="textnumb">Число</param>
+        /// <returns>Массив байт</returns>
         static byte[] ConvToBitFromBigInteger(BigInteger textnumb)
         {
 
@@ -555,8 +573,6 @@ namespace RabinLib
             }
         }
 
-
-
         /// <summary>
         /// Вычисление сдвига и подписи
         /// </summary>
@@ -618,13 +634,12 @@ namespace RabinLib
                 }
             }
 
-            Console.WriteLine("При расшифровке был найдено {0} элементов, удлевотворящих заданной хеш функции", result.Count);
 
             if (result.Count() == 1)
             {
-                Console.WriteLine("Было успешно определено сходное сообщение");
+               
                 Console.ForegroundColor = ConsoleColor.Green;
-                Console.WriteLine("Исходное сообщение :" + result[0]);
+         
             }
             else
                 Console.WriteLine("Не удалось однозначно установить исходное сообщение");
@@ -632,6 +647,12 @@ namespace RabinLib
             return result;
 
         }
+
+        /// <summary>
+        /// Выбор случайного числа в промежутке от 1 до p
+        /// </summary>
+        /// <param name="p">Промежуток генерации</param>
+        /// <returns>Число в промежутке от 1 до p</returns>
         static BigInteger Rand(BigInteger p)
         {
 
@@ -663,6 +684,7 @@ namespace RabinLib
             result = BigInteger.Parse(str);
             return result;
         }
+
         /// <summary>
         /// Выбор рандомного числа B
         /// </summary>
@@ -710,7 +732,6 @@ namespace RabinLib
 
         }
 
-
         /// <summary>
         /// Сивол якоби
         /// </summary>
@@ -742,13 +763,12 @@ namespace RabinLib
             throw new Exception("Encryption exception");
         }
 
-
         /// <summary>
         /// Нахождение обратного элемента
         /// </summary>
         /// <param name="a">Число обратный элемент которого мы ищем</param>
         /// <param name="n">Число по модулю которого идет вычисление обратного элемента</param>
-        /// <returns></returns>
+        /// <returns>Обратный элемент</returns>
         static BigInteger FindA_1ModN(BigInteger a, BigInteger n)
         {
             BigInteger d, x, y;
@@ -831,13 +851,13 @@ namespace RabinLib
         /// <summary>
         /// Получение квадратных корней(двух)
         /// </summary>
-        /// <param name="r"></param>
-        /// <param name="_r"></param>
-        /// <param name="p"></param>
-        /// <param name="a"></param>
+        /// <param name="r">Первый корень</param>
+        /// <param name="_r">Второй корень</param>
+        /// <param name="p">модуль по которому берётся корень</param>
+        /// <param name="a">число корень из которого следует вычислить</param>
         static void Get_Sqare(out BigInteger r, out BigInteger _r, BigInteger p, BigInteger a)
         {
-            // a = BigInteger.ModPow(a, 1, p);
+           
 
             //step 1
             if (Jacobi(a, p) == -1)
@@ -874,8 +894,8 @@ namespace RabinLib
         /// <summary>
         /// Хеш функция удваивания двух последних цифр
         /// </summary>
-        /// <param name="CryptTEXT"></param>
-        /// <returns></returns>
+        /// <param name="CryptTEXT">Число цифры которого удваиваем</param>
+        /// <returns>Число с удвоемнными последними цифрами</returns>
         static BigInteger MX(BigInteger CryptTEXT)
         {
             return CryptTEXT % 100 + CryptTEXT * 100;
@@ -883,6 +903,13 @@ namespace RabinLib
         #endregion
 
         #region Miller_Rabin_Tests
+
+        /// <summary>
+        /// Тест на простоту Миллера-Рабина
+        /// </summary>
+        /// <param name="Number">Проверяемое число</param>
+        /// <param name="Rounds">Точность(количество раундов)</param>
+        /// <returns>True если число вероятно простое. False в случае если оно составное </returns>
         public static bool Miller_Rabin_Test(BigInteger Number, BigInteger Rounds)
         {
             if (Number <= 2)
@@ -890,8 +917,6 @@ namespace RabinLib
 
             if (BigInteger.ModPow(Number, 1, 2) == 0)
                 return false;
-
-
 
             BigInteger S, T;
 
@@ -927,6 +952,13 @@ namespace RabinLib
 
             return true;
         }
+
+        /// <summary>
+        /// Тест на простоту Миллера-Рабина с автоматическое точностью
+        /// равное log2(n)
+        /// </summary>
+        /// <param name="Number">Проверяемое число</param>
+        /// <returns>True если число вероятно простое. False в случае если оно составное</returns>
         public static bool Miller_Rabin_Test(BigInteger Number)
         {
             if (Number <= 2)
@@ -983,6 +1015,10 @@ namespace RabinLib
         #endregion
 
         #region Inactive methods
+        //в этом разделе находятся методы которые могут использоваться для быстроты
+        // но в силу их узкости были заменены
+
+
         /// <summary>
         /// Преобразует строку в число
         /// </summary>
