@@ -15,18 +15,19 @@ namespace RabinLib
         #region Methods for Big text
         public static BigInteger[] EncryptionBigText(string text, BigInteger OpenyKey)
         {
-           int size = (int)CalcylateByteSize(OpenyKey);
+            int size = (int)CalcylateByteSize(OpenyKey);
 
+            Console.WriteLine("size is "+size);
             byte[] textUTF8 = Encoding.UTF8.GetBytes(text);
 
             Console.WriteLine("Представления текста в виде массива байтов:");
-            foreach ( byte b in textUTF8)
+            foreach (byte b in textUTF8)
             {
-                Console.WriteLine("\t"+b);
+                Console.WriteLine("\t" + b);
             }
 
             int cycleCount = (textUTF8.Length / size) + (textUTF8.Length % size == 0 ? 0 : 1);
-
+            bool falgOK = cycleCount == (textUTF8.Length / size);
             BigInteger[] result = new BigInteger[cycleCount];
 
             int iteratoR = 0;
@@ -36,14 +37,14 @@ namespace RabinLib
             {
                 result[i] = 0;
 
-                int siZE = i == cycleCount - 1 ? textUTF8.Length % size : size;
+                int siZE = i == cycleCount - 1 ? falgOK ? size : (textUTF8.Length%size) : size;
 
-                for (int j = 0; j< siZE; j++)
+                for (int j = 0; j < siZE; j++)
                     result[i] += textUTF8[iteratoR++] * (BigInteger)Math.Pow(2, 8 * j);
 
                 result[i] = MX(result[i]);
                 result[i] = BigInteger.ModPow(result[i], 2, OpenyKey);
-                
+
             }
 
 
@@ -51,9 +52,16 @@ namespace RabinLib
 
 
         }
-        public static string DecryptionBigText(byte[] Text, BigInteger q, BigInteger p)
+        public static string DecryptionBigText(BigInteger[] Text, BigInteger q, BigInteger p)
         {
-            throw new Exception();
+
+            string result = "";
+            foreach( BigInteger b in Text)
+            {
+                result += Decryption(b, q, p);
+            }
+
+            return result;
         }
         static BigInteger CalcylateByteSize(BigInteger Openkey)
         {
