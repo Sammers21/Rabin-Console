@@ -61,6 +61,7 @@ namespace RabinLib
 
 
             List<byte> bytelist = new List<byte>();
+
             foreach (BigInteger b in Text)
             {
                 byte[] cur = DecryptionBytes(b, q, p);
@@ -70,20 +71,24 @@ namespace RabinLib
                     bytelist.Add(by);
                 }
             }
+
             int itr = 1;
+
             foreach (byte b in bytelist)
             {
                 string s = "\t" + b + (itr % 10 == 0 ? "\n" : "");
                 Console.Write("\t" + b);
             }
+
             return Encoding.UTF8.GetString(bytelist.ToArray());
         }
         static BigInteger CalcylateByteSize(BigInteger Openkey)
         {
             BigInteger x = 256, bytecount = 1;
-            string xi = Openkey + "";
-            int lastOpKey = int.Parse(xi[xi.Length - 1] + "" + xi[(xi).Length - 2]);
 
+            string xi = Openkey + "";
+
+            int lastOpKey = int.Parse(xi[xi.Length - 1] + "" + xi[(xi).Length - 2]);
 
             while (Openkey > (x * 100 + lastOpKey))
             {
@@ -91,8 +96,6 @@ namespace RabinLib
                 bytecount++;
             }
             bytecount--;
-
-
 
             if (bytecount <= 1)
                 throw new Exception("слишком маленький открытый ключ");
@@ -149,8 +152,8 @@ namespace RabinLib
             if (!(Miller_Rabin_Test(q) && Miller_Rabin_Test(p)))
                 throw new Exception("Один из ключей не простой");
 
-
             BigInteger r, _r;
+
             BigInteger s, _s;
 
             BigInteger n = p * q;
@@ -185,11 +188,17 @@ namespace RabinLib
 
             List<string> roots = new List<string>() {x.ToString(),minusX.ToString(),
          y.ToString(),minusY.ToString()};
+
             List<string> Analized = Analyze(roots);
+
             Console.ForegroundColor = ConsoleColor.Green;
+
             BigInteger message = BigInteger.Parse(Analized[0]);
+
             message /= 100;
+
             Console.WriteLine("полученно " + message);
+
             return (ConvToStringWithBit(message));
 
         }/// <summary>
@@ -205,7 +214,6 @@ namespace RabinLib
             if (!(Miller_Rabin_Test(q) && Miller_Rabin_Test(p)))
                 throw new Exception("Один из ключей не простой");
 
-
             BigInteger r, _r;
             BigInteger s, _s;
 
@@ -217,6 +225,7 @@ namespace RabinLib
 
             //step 3
             BigInteger D, c, d;
+
             do
             {
                 ShareAlgoryeOfEyclid(out D, out c, out d, p, q);
@@ -238,13 +247,14 @@ namespace RabinLib
 
             List<string> roots = new List<string>() {x.ToString(),minusX.ToString(),
          y.ToString(),minusY.ToString()};
+
             List<string> Analized = Analyze(roots);
+
             Console.ForegroundColor = ConsoleColor.Green;
+
             BigInteger message = BigInteger.Parse(Analized[0]);
+
             message /= 100;
-
-
-
 
             return (ConvToBitFromBigInteger(message));
 
@@ -275,8 +285,6 @@ namespace RabinLib
 
             BigInteger result = ConvToBigIntWithBit(text);
 
-
-
             Console.WriteLine("результат числового представления : " + result);
 
             result = MX(result);
@@ -288,7 +296,9 @@ namespace RabinLib
                 throw new Exception("Слишком большое сообщение");
 
             BigInteger s;
+
             funcR(result, p, q, out s, out II);
+
             return s;
 
         }
@@ -374,8 +384,11 @@ namespace RabinLib
         public static string DecryptSign(BigInteger S, BigInteger OpenKey, out bool res)
         {
             BigInteger u = BigInteger.ModPow(S, 2, OpenKey), U = BigInteger.ModPow(u, 1, 8);
+
             Console.WriteLine("u= " + u + " U=" + U);
+
             BigInteger w;
+
             if (U == 6)
                 w = u;
 
@@ -390,14 +403,15 @@ namespace RabinLib
 
             else
                 throw new Exception("Ошибка в проверке подписи");
+
             Console.WriteLine("проверка w=" + w);
+
             SignatyreVert Vetif = delegate (BigInteger si)
               {
                   if ((si - 6) % 16 == 0)
                       return true;
                   else return false;
               };
-
 
             res = Vetif(w);
 
@@ -423,14 +437,15 @@ namespace RabinLib
             Console.WriteLine("Текст на входе " + Text + "\n");
 
             byte[] data = Encoding.UTF8.GetBytes(Text);
-            Console.Write("массив байt \n");
 
+            Console.Write("массив байt \n");
 
             for (int i = 0; i < data.Length; i++)
             {
                 string rees = "";
                 if (i > 0)
                     rees = i % 5 == 0 ? "\n" : "";
+
                 Console.Write(data[i] + "\t" + rees);
             }
             Console.WriteLine("\n");
@@ -453,7 +468,6 @@ namespace RabinLib
         /// <returns></returns>
         static byte[] ConvToBitFromBigInteger(BigInteger textnumb)
         {
-
 
             byte[] data = new byte[0];
 
