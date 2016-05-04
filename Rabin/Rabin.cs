@@ -18,11 +18,39 @@ namespace RabinLib
             BigInteger size = CalcylateByteSize(OpenyKey);
 
             byte[] textUTF8 = Encoding.UTF8.GetBytes(text);
-            
+
+            int cycleCount = textUTF8.Length / size + textUTF8.Length % size == 0 ? 0 : 1;
+
+            List<Byte> resultlist = new List<byte>();
+            BigInteger k = 0;
+            for (int i = 0; i < cycleCount; i++)
+            {
+
+                BigInteger res = 0;
+                BigInteger siZE = i == cycleCount - 1 ? textUTF8.Length % size + k : size + k;
+
+                for (long j = (long)k; j < siZE; j++)
+                {
+                    res += textUTF8[j] * (BigInteger)Math.Pow(2, 8 * i);
+                }
+                res = MX(res);
 
 
+                if (res > OpenyKey)
+                    throw new Exception("Слишком большое сообщение");
 
-            throw new Exception();
+                BigInteger C = BigInteger.ModPow(res, 2, OpenyKey);
+                byte[] neddt = ConvToBitFromBigInteger(C);
+
+                foreach (byte by in neddt)
+                {
+                    resultlist.Add(by);
+                }
+                k += size;
+            }
+            return resultlist.ToArray();
+
+    
         }
         public static string DecryptionBigText(byte[] Text, BigInteger q, BigInteger p)
         {
@@ -31,11 +59,11 @@ namespace RabinLib
         static BigInteger CalcylateByteSize(BigInteger Openkey)
         {
             BigInteger x = 256, bytecount = 1;
+            string xi = Openkey + "";
+            int lastOpKey = int.Parse(xi[xi.Length - 1] + "" + xi[(xi).Length - 2]);
 
-            int lastOpKey=int.Parse((Openkey+"")[(Openkey+"").Length-1]+""+(Openkey+"")[(Openkey+"").Length-2]);
 
-
-            while (Openkey > (x*100+lastOpKey))
+            while (Openkey > (x * 100 + lastOpKey))
             {
                 x *= 256;
                 bytecount++;
@@ -339,12 +367,13 @@ namespace RabinLib
             return res;
         }
 
+
         /// <summary>
-        /// Метод преобразующий число в текст
+        /// преобразует число в массив байт
         /// </summary>
-        /// <param name="textnumb">Число</param>
-        /// <returns>Текст</returns>
-        public static string ConvToStringWithBit(BigInteger textnumb)
+        /// <param name="textnumb"></param>
+        /// <returns></returns>
+        static byte[] ConvToBitFromBigInteger(BigInteger textnumb)
         {
 
 
@@ -378,7 +407,19 @@ namespace RabinLib
                     }
                 }
             }
+            return data;
+        }
 
+        /// <summary>
+        /// Метод преобразующий число в текст
+        /// </summary>
+        /// <param name="textnumb">Число</param>
+        /// <returns>Текст</returns>
+        public static string ConvToStringWithBit(BigInteger textnumb)
+        {
+
+
+            byte[] data = ConvToBitFromBigInteger(textnumb);
 
             string result = Encoding.UTF8.GetString(data);
 
