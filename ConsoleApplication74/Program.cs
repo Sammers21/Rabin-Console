@@ -45,59 +45,59 @@ namespace RabinTestConsole
                             Console.WriteLine("Ведите текст для зашифровки\n");
                             string text = Console.ReadLine();
                             Console.WriteLine("\n");
-
-                            BigInteger[] arr = Rabin.EncryptionBigText(text, n);
-
-                            Console.WriteLine("\nBigInt Зашифрованное представление Массив :\n\n");
-                            foreach (BigInteger b in arr)
+                            try
                             {
-                                Console.WriteLine("\t " + b);
+                                BigInteger[] arr = Rabin.EncryptionBigText(text, n);
+
+                                Console.WriteLine("\nBigInt Зашифрованное представление Массив :\n\n");
+                                foreach (BigInteger b in arr)
+                                {
+                                    Console.WriteLine("\t " + b);
+                                }
+                                Console.WriteLine("\n");
+                                string decrText = Rabin.DecryptionBigText(arr, p, q);
+
+
+                                Console.WriteLine("\n\n\nПри расшивровке было получено сообдещие:\n\n"
+                                     + decrText);
                             }
-                            Console.WriteLine("\n");
-                            string decrText = Rabin.DecryptionBigText(arr, p, q);
-
-
-                            Console.WriteLine("\n\n\nПри расшивровке было получено сообдещие:\n\n"
-                                 + decrText);
+                            catch (Exception e)
+                            {
+                                Console.WriteLine(e.Message);
+                            }
 
                         }
                         break;
                     case "2":
                         {
 
+
+                            Console.Clear();
+
+                            Console.WriteLine("Ведите текст для зашифровки");
+
+                            string text = Console.ReadLine();
+
+
+                            BigInteger p = 3004913, q = 1109219;
+                            BigInteger n = p * q, III;
+
+                            Console.WriteLine("В данном случае используются p={0}\tq={1}", p, q);
                             try
                             {
-                                Console.Clear();
+                                BigInteger numTe = Rabin.RabinSignatyre(text, p, q, out III);
 
-                                Console.WriteLine("Ведите текст для зашифровки");
+                                Console.WriteLine("Подпись S={0},I={1}", numTe, III);
 
-                                string text = Console.ReadLine();
+                                string dec = Rabin.DecryptionWithVertif(n, numTe, III);
 
-
-                                BigInteger p = 3004913, q = 1109219;
-                                BigInteger n = p * q, III;
-
-                                Console.WriteLine("В данном случае используются p={0}\tq={1}", p, q);
-                                try
-                                {
-                                    BigInteger numTe = Rabin.RabinSignatyre(text, p, q, out III);
-
-                                    Console.WriteLine("Подпись S={0},I={1}", numTe, III);
-
-                                    string dec = Rabin.DecryptionWithVertif(n, numTe, III);
-
-                                    Console.WriteLine(dec);
-                                }
-                                catch (Exception e)
-                                {
-                                    Console.WriteLine(e.Message);
-                                }
+                                Console.WriteLine(dec);
                             }
                             catch (Exception e)
                             {
                                 Console.WriteLine(e.Message);
-                                Console.ReadLine();
                             }
+
                         }
                         break;
 
