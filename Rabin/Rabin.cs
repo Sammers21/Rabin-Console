@@ -14,7 +14,7 @@ namespace RabinLib
         #region Rabin Classic System
         //Криптосистема Рабина
         //page 156
-
+        //
         /// <summary>
         /// Шифрование по обычной схеме Рабина
         /// </summary>
