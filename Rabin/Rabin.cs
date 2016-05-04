@@ -30,14 +30,20 @@ namespace RabinLib
         }
         static BigInteger CalcylateByteSize(BigInteger Openkey)
         {
-            BigInteger x = 256, bytecount = 0;
+            BigInteger x = 256, bytecount = 1;
+
+            int lastOpKey=int.Parse((Openkey+"")[(Openkey+"").Length-1]+""+(Openkey+"")[(Openkey+"").Length-2]);
 
 
-            while (Openkey > x)
+            while (Openkey > (x*100+lastOpKey))
             {
                 x *= 256;
                 bytecount++;
             }
+            bytecount--;
+
+
+
             if (bytecount <= 1)
                 throw new Exception("слишком маленький открытый ключ");
 
