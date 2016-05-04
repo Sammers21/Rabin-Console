@@ -17,13 +17,15 @@ namespace RabinLib
         {
             int size = (int)CalcylateByteSize(OpenyKey);
 
-            Console.WriteLine("size is "+size);
+            Console.WriteLine("size is " + size);
             byte[] textUTF8 = Encoding.UTF8.GetBytes(text);
 
             Console.WriteLine("Представления текста в виде массива байтов:");
+            int itr = 1;
             foreach (byte b in textUTF8)
             {
-                Console.WriteLine("\t" + b);
+                string s = "\t" + b+(itr%10==0 ? "\n": "");
+                Console.Write("\t" + b);
             }
 
             int cycleCount = (textUTF8.Length / size) + (textUTF8.Length % size == 0 ? 0 : 1);
@@ -37,7 +39,7 @@ namespace RabinLib
             {
                 result[i] = 0;
 
-                int siZE = i == cycleCount - 1 ? falgOK ? size : (textUTF8.Length%size) : size;
+                int siZE = i == cycleCount - 1 ? falgOK ? size : (textUTF8.Length % size) : size;
 
                 for (int j = 0; j < siZE; j++)
                     result[i] += textUTF8[iteratoR++] * (BigInteger)Math.Pow(2, 8 * j);
@@ -56,12 +58,25 @@ namespace RabinLib
         {
 
             string result = "";
-            foreach( BigInteger b in Text)
-            {
-                result += Decryption(b, q, p);
-            }
 
-            return result;
+
+            List<byte> bytelist = new List<byte>();
+            foreach (BigInteger b in Text)
+            {
+                byte[] cur = DecryptionBytes(b, q, p);
+
+                foreach (byte by in cur)
+                {
+                    bytelist.Add(by);
+                }
+            }
+            int itr = 1;
+            foreach (byte b in bytelist)
+            {
+                string s = "\t" + b + (itr % 10 == 0 ? "\n" : "");
+                Console.Write("\t" + b);
+            }
+            return Encoding.UTF8.GetString(bytelist.ToArray());
         }
         static BigInteger CalcylateByteSize(BigInteger Openkey)
         {
@@ -176,6 +191,62 @@ namespace RabinLib
             message /= 100;
             Console.WriteLine("полученно " + message);
             return (ConvToStringWithBit(message));
+
+        }/// <summary>
+         /// Деширование
+         /// </summary>
+         /// <param name="TextC">Зашифрованный текст</param>
+         /// <param name="q">Простое число q. Один из закрытых ключей</param>
+         /// <param name="p">Простое число p. Один из закрытых ключей</param>
+         /// <returns>Расшифрованный текст</returns>
+        public static byte[] DecryptionBytes(BigInteger TextC, BigInteger q, BigInteger p)
+        {
+
+            if (!(Miller_Rabin_Test(q) && Miller_Rabin_Test(p)))
+                throw new Exception("Один из ключей не простой");
+
+
+            BigInteger r, _r;
+            BigInteger s, _s;
+
+            BigInteger n = p * q;
+            //step 1
+            Get_Sqare(out r, out _r, p, TextC);
+            //step 2
+            Get_Sqare(out s, out _s, q, TextC);
+
+            //step 3
+            BigInteger D, c, d;
+            do
+            {
+                ShareAlgoryeOfEyclid(out D, out c, out d, p, q);
+            } while (D != 1);
+
+            BigInteger x = BigInteger.ModPow((r * d * q + s * c * p), 1, n);
+            while (x < 0)
+                x += n;
+            BigInteger minusX = n - x;
+            BigInteger y = BigInteger.ModPow((r * d * q - s * c * p), 1, n);
+            while (y < 0)
+                y += n;
+            BigInteger minusY = n - y;
+            Console.ForegroundColor = ConsoleColor.Yellow;
+
+
+            Console.ForegroundColor = ConsoleColor.Red;
+
+
+            List<string> roots = new List<string>() {x.ToString(),minusX.ToString(),
+         y.ToString(),minusY.ToString()};
+            List<string> Analized = Analyze(roots);
+            Console.ForegroundColor = ConsoleColor.Green;
+            BigInteger message = BigInteger.Parse(Analized[0]);
+            message /= 100;
+
+
+
+
+            return (ConvToBitFromBigInteger(message));
 
         }
 
