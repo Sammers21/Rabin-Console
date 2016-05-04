@@ -15,8 +15,8 @@ namespace RabinTestConsole
         {
 
             do
-            {                    
-                
+            {
+
                 Console.Clear();
                 Console.ForegroundColor = ConsoleColor.Red;
                 Console.WriteLine("Введиет тестиремый реджим \n" +
@@ -34,22 +34,31 @@ namespace RabinTestConsole
 
                             Console.Clear();
 
-                            Console.WriteLine("Ведите текст для зашифровки;");
 
-                            string text = Console.ReadLine();
 
-                            BigInteger p = 3004913 /*1699*/, q = 20979403, n = p * q;
+
+                            BigInteger p = 3004913, q = 20979403, n = p * q;
+
 
                             Console.WriteLine("В данном случае используются p={0}\tq={1}", p, q);
 
-                            BigInteger TexEcnript = Rabin.Encryption(text, n);
+                            Console.WriteLine("Ведите текст для зашифровки\n");
+                            string text = Console.ReadLine();
+                            Console.WriteLine("\n");
 
-                            Console.WriteLine("Зашифрованный текст имеет вид " + TexEcnript + "\n");
+                            BigInteger[] arr = Rabin.EncryptionBigText(text, n);
 
-                            string decText = Rabin.Decryption(TexEcnript, q, p);
+                            Console.WriteLine("\nBigInt Зашифрованное представление Массив :\n\n");
+                            foreach (BigInteger b in arr)
+                            {
+                                Console.WriteLine("\t " + b);
+                            }
+                            Console.WriteLine("\n");
+                            string decrText = Rabin.DecryptionBigText(arr, p, q);
 
-                            Console.WriteLine("При расшивровке было получено сообдещие:\n"
-                                 + decText);
+
+                            Console.WriteLine("\n\n\nПри расшивровке было получено сообдещие:\n\n"
+                                 + decrText);
 
                         }
                         break;
@@ -69,7 +78,8 @@ namespace RabinTestConsole
                                 BigInteger n = p * q, III;
 
                                 Console.WriteLine("В данном случае используются p={0}\tq={1}", p, q);
-                                try {
+                                try
+                                {
                                     BigInteger numTe = Rabin.RabinSignatyre(text, p, q, out III);
 
                                     Console.WriteLine("Подпись S={0},I={1}", numTe, III);
@@ -78,7 +88,7 @@ namespace RabinTestConsole
 
                                     Console.WriteLine(dec);
                                 }
-                                catch(Exception e)
+                                catch (Exception e)
                                 {
                                     Console.WriteLine(e.Message);
                                 }
@@ -93,7 +103,7 @@ namespace RabinTestConsole
 
                     case "3":
                         {
-                            
+
                             Console.Clear();
                             Console.WriteLine("Ведиет текст для зашифровки");
                             string Text = Console.ReadLine();
@@ -113,7 +123,7 @@ namespace RabinTestConsole
 
                                 Console.ReadLine();
                             }
-                            catch(Exception e)
+                            catch (Exception e)
                             {
 
                                 Console.WriteLine(e.Message);
@@ -125,7 +135,7 @@ namespace RabinTestConsole
                         Console.WriteLine("Не корректный ввод, попробуйте еще раз");
                         break;
                 }
-                Console.WriteLine("для выхода нажимте Esc");
+                Console.WriteLine("\n\nдля выхода нажимте Esc");
             } while (Console.ReadKey(true).Key != ConsoleKey.Escape);
 
 
