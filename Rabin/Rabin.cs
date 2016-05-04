@@ -13,44 +13,43 @@ namespace RabinLib
 
 
         #region Methods for Big text
-        public static byte[] EncryptionBigText(string text, BigInteger OpenyKey)
+        public static BigInteger[] EncryptionBigText(string text, BigInteger OpenyKey)
         {
-            BigInteger size = CalcylateByteSize(OpenyKey);
+           int size = (int)CalcylateByteSize(OpenyKey);
 
             byte[] textUTF8 = Encoding.UTF8.GetBytes(text);
 
-            int cycleCount = textUTF8.Length / size + textUTF8.Length % size == 0 ? 0 : 1;
+            Console.WriteLine("Представления текста в виде массива байтов:");
+            foreach ( byte b in textUTF8)
+            {
+                Console.WriteLine("\t"+b);
+            }
 
-            List<Byte> resultlist = new List<byte>();
-            BigInteger k = 0;
+            int cycleCount = (textUTF8.Length / size) + (textUTF8.Length % size == 0 ? 0 : 1);
+
+            BigInteger[] result = new BigInteger[cycleCount];
+
+            int iteratoR = 0;
+
+
             for (int i = 0; i < cycleCount; i++)
             {
+                result[i] = 0;
 
-                BigInteger res = 0;
-                BigInteger siZE = i == cycleCount - 1 ? textUTF8.Length % size + k : size + k;
+                int siZE = i == cycleCount - 1 ? textUTF8.Length % size : size;
 
-                for (long j = (long)k; j < siZE; j++)
-                {
-                    res += textUTF8[j] * (BigInteger)Math.Pow(2, 8 * i);
-                }
-                res = MX(res);
+                for (int j = 0; j< siZE; j++)
+                    result[i] += textUTF8[iteratoR++] * (BigInteger)Math.Pow(2, 8 * j);
 
-
-                if (res > OpenyKey)
-                    throw new Exception("Слишком большое сообщение");
-
-                BigInteger C = BigInteger.ModPow(res, 2, OpenyKey);
-                byte[] neddt = ConvToBitFromBigInteger(C);
-
-                foreach (byte by in neddt)
-                {
-                    resultlist.Add(by);
-                }
-                k += size;
+                result[i] = MX(result[i]);
+                result[i] = BigInteger.ModPow(result[i], 2, OpenyKey);
+                
             }
-            return resultlist.ToArray();
 
-    
+
+            return result;
+
+
         }
         public static string DecryptionBigText(byte[] Text, BigInteger q, BigInteger p)
         {
